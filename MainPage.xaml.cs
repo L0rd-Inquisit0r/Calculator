@@ -32,7 +32,7 @@ namespace Calculator
             string input = ((Button)sender).Text;
             if ("1234567890.".Contains(input))
             {
-                if (clearable)
+                if (clearable) //clear item so no need to backspace
                 {
                     result.Text = "0";
                     clearable = false;
@@ -48,9 +48,19 @@ namespace Calculator
             else
             {
                 string eq = equation.Text;
+                string res = result.Text;
+
+                if (res.ElementAt(res.Length - 1).Equals('.')) // remove stray decimal point
+                {
+                    result.Text = res.Remove(res.Length-1, 1);
+                    res = result.Text;
+
+
+                } 
+
                 equation.Text = (clearable ? 
-                    eq.Remove(equation.Text.Length - 1, 1) :
-                    ValidateEq() + result.Text + " ") 
+                    eq.Remove(eq.Length - 1, 1) :
+                    ValidateEq() + res + " ") 
                     + input;
                 clearable = true;
 
