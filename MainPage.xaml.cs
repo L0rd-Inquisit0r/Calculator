@@ -16,6 +16,7 @@ namespace Calculator
         {
             equation.Text = " ";
             result.Text = "0";
+            
             DecimalBtn.IsEnabled = true;
         }
 
@@ -33,9 +34,9 @@ namespace Calculator
             {
                 if (clearable)
                 {
-                    DecimalBtn.IsEnabled = true;
                     result.Text = "0";
                     clearable = false;
+                    DecimalBtn.IsEnabled = true;
                 }
 
                 if (input.Equals(".")) DecimalBtn.IsEnabled = false;
@@ -43,15 +44,13 @@ namespace Calculator
                 result.Text =
                     (result.Text.Equals("0") && !input.Equals(".") ? "" : result.Text)
                     + input;
-
             }
             else
             {
-                equation.Text =
-                    ((equation.Text.Contains('=') ? "0" : equation.Text)
-                    .Equals("0") ? "" : equation.Text + " ")
-                    + result.Text
-                    + " "
+                string eq = equation.Text;
+                equation.Text = (clearable ? 
+                    eq.Remove(equation.Text.Length - 1, 1) :
+                    ValidateEq() + result.Text + " ") 
                     + input;
                 clearable = true;
 
@@ -60,12 +59,16 @@ namespace Calculator
 
         private void Equals(object sender, EventArgs e)
         {
-            equation.Text = 
-                ((equation.Text.Contains('=') ? "0" : equation.Text)
-                .Equals("0") ? "" : equation.Text + " ") 
-                + result.Text;
+            equation.Text = ValidateEq() + result.Text;
             result.Text = pc.Evaluate(equation.Text.Replace(" ", "")).ToString();
             equation.Text += " =";
+        }
+
+        private string ValidateEq()
+        {
+            string eq = equation.Text;
+            return ((eq.Contains('=') ? "0" : eq)
+                 .Equals("0") ? "" : eq + " ");
         }
     }
     public class ParseCalculator

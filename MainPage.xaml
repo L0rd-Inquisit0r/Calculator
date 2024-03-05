@@ -25,30 +25,43 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Label
-            x:Name="equation"
+        <ScrollView
+            Orientation="Horizontal"
             Grid.Row="0"
             Grid.ColumnSpan="4"
-            BackgroundColor="Black"
-            LineBreakMode="HeadTruncation"
-            FontAttributes="Bold"
-            FontSize="32"
-            Text=" "
-            TextColor="LightGray"
-            HorizontalTextAlignment="End"
-            VerticalTextAlignment="End"/>
-        <Label
-            x:Name="result"
+            HorizontalOptions="EndAndExpand"
+            HorizontalScrollBarVisibility="Never"
+         >
+            <Label
+                x:Name="equation"
+                BackgroundColor="Black"
+                FontAttributes="Bold"
+                FontSize="32"
+                Text=" "
+                TextColor="LightGray"
+                HorizontalTextAlignment="End"
+                VerticalTextAlignment="End"/>
+        </ScrollView>
+        <ScrollView
+            Orientation="Horizontal"
             Grid.Row="1"
             Grid.ColumnSpan="4"
-            BackgroundColor="Black"
-            LineBreakMode="MiddleTruncation"
-            FontAttributes="Bold"
-            FontSize="64"
-            Text="0"
-            TextColor="White"
-            HorizontalTextAlignment="End"
-            VerticalTextAlignment="Start"/>
+            Grid.RowSpan="1"
+            HorizontalOptions="EndAndExpand"
+            HorizontalScrollBarVisibility="Always"
+            >
+            <Label
+                    x:Name="result"
+                    BackgroundColor="Black"
+                    FontAutoScalingEnabled="True"
+                    LineBreakMode="NoWrap"
+                    FontAttributes="Bold"
+                    FontSize="64"
+                    Text="0"
+                    TextColor="White"
+                    HorizontalTextAlignment="End"
+                    VerticalTextAlignment="Start"/>
+        </ScrollView>
 
         <Button
             Clicked="Clear"
