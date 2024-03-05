@@ -1,6 +1,5 @@
-﻿using Java.Util.Functions;
-using System.Text;
-using static Android.Renderscripts.ScriptGroup;
+﻿using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Calculator
 {
@@ -23,14 +22,7 @@ namespace Calculator
         private void Delete(object sender, EventArgs e)
         {
             string res = result.Text;
-            if (res.Length != 1)
-            {
-                result.Text = res.Remove(res.Length - 1, 1);
-            }
-            else
-            {
-                result.Text = "0";
-            }
+            result.Text = res.Length == 1 ? "0" : res.Remove(res.Length - 1, 1) ;
             if (!result.Text.Contains('.')) DecimalBtn.IsEnabled = true;
         }
 
@@ -46,17 +38,20 @@ namespace Calculator
                     clearable = false;
                 }
 
-                if(input.Equals(".")) DecimalBtn.IsEnabled = false;
+                if (input.Equals(".")) DecimalBtn.IsEnabled = false;
 
-                result.Text = (result.Text.Equals("0") ? "" : result.Text) + input;
+                result.Text =
+                    (result.Text.Equals("0") && !input.Equals(".") ? "" : result.Text)
+                    + input;
+
             }
             else
             {
-                equation.Text = 
+                equation.Text =
                     ((equation.Text.Contains('=') ? "0" : equation.Text)
                     .Equals("0") ? "" : equation.Text + " ")
-                    + result.Text 
-                    + " " 
+                    + result.Text
+                    + " "
                     + input;
                 clearable = true;
 
@@ -82,7 +77,6 @@ namespace Calculator
             Stack<double> Numbers = new();
             Stack<char> Operators = new();
             StringBuilder temp = new();
-            double num;
 
             foreach (char ch in expression + "=")
             {
@@ -92,7 +86,7 @@ namespace Calculator
                 }
                 else //expect an operator
                 {
-                    _ = double.TryParse(temp.ToString(), out num); //suppressed a problem on testing if parsing is successful
+                    _ = double.TryParse(temp.ToString(), out double num); //suppressed a problem on testing if parsing is successful
                     temp.Clear();
                     Numbers.Push(num);
 
