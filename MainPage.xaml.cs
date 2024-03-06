@@ -6,6 +6,7 @@ namespace Calculator
     public partial class MainPage : ContentPage
     {
         private bool clearable = false;
+        private bool opsEnabled = true;
         private ParseCalculator pc = new();
         public MainPage()
         {
@@ -14,41 +15,40 @@ namespace Calculator
 
         private void Clear(object sender, EventArgs e)
         {
+            ResetResult();
             equation.Text = " ";
-            result.Text = "0";
-            
-            DecimalBtn.IsEnabled = true;
+
+            if (!opsEnabled) ToggleOps();
         }
 
         private void Delete(object sender, EventArgs e)
         {
             string res = result.Text;
-            result.Text = res.Length == 1 || "Error: Cannot divide by 0".Contains(res) ? "0" : res.Remove(res.Length - 1, 1) ;
+            result.Text = res.Length == 1 || clearable ? "0" : res.Remove(res.Length - 1, 1) ;
             if (!result.Text.Contains('.')) DecimalBtn.IsEnabled = true;
         }
 
         private void Input(object sender, EventArgs e)
         {
             string input = ((Button)sender).Text;
+            if (!opsEnabled) ToggleOps();
 
             if ("1234567890.".Contains(input))
             {
-                if (clearable) // clear item so no need to backspace
-                {
-                    result.Text = "0";
-                    clearable = false;
-                    DecimalBtn.IsEnabled = true;
-                }
-                if (input.Equals("."))
-                {
-                    DecimalBtn.IsEnabled = false;
-                }
+                if (clearable) 
+                    ResetResult();
 
-                result.Text = (result.Text.Equals("0") && !input.Equals(".") || equation.Text.Contains("=") ? "" : result.Text) + input;
-                if(equation.Text.Contains("=")) 
-                {
+                if (input.Equals(".")) 
+                    DecimalBtn.IsEnabled = false;
+
+                result.Text = 
+                    (result.Text.Equals("0") && 
+                    !input.Equals(".") || 
+                    equation.Text.Contains('=') ? "" : result.Text) 
+                    + input;
+                
+                if(equation.Text.Contains('=')) 
                     equation.Text = "";
-                }
             }
             else
             {
@@ -83,8 +83,7 @@ namespace Calculator
 
                 if (double.IsInfinity(evaluationResult) || double.IsNaN(evaluationResult))
                 {
-                    result.Text = "Error: Cannot divide by 0";
-                    equation.Text = "";
+                    ErrorHandler("Cannot divide by 0");
                 }
                 else
                 {
@@ -94,11 +93,18 @@ namespace Calculator
             }
             catch (Exception ex)
             {
-                result.Text = "Error: " + ex.Message;
-                equation.Text = "";
+                ErrorHandler(ex.Message);
             }
         }
 
+
+        private void ResetResult()
+        {
+            result.Text = "0";
+            result.FontSize = 64;
+            clearable = false;
+            DecimalBtn.IsEnabled = true;
+        }
 
         private string ValidateEq()
         {
@@ -106,6 +112,27 @@ namespace Calculator
             return ((eq.Contains("=") ? "0" : eq)
                  .Equals("0") ? "" : eq + " ");
         }
+
+        private void ToggleOps()
+        {
+            Button []opBtns = { plus, minus, div, mult, eq };
+            foreach(Button btn in opBtns)
+            {
+                btn.IsEnabled = !btn.IsEnabled;
+            }
+
+            opsEnabled = plus.IsEnabled;
+        }
+
+        private void ErrorHandler(string msg, int fontSize = 24)
+        {
+            clearable = true;
+            result.Text = "Error: " + msg;
+            result.FontSize = fontSize;
+            equation.Text = "";
+            ToggleOps();
+        }
+
     }
     public class ParseCalculator
     {

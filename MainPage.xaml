@@ -79,7 +79,7 @@
             BackgroundColor="Gray"
             Clicked="Delete"
             CornerRadius="0"
-            FontSize="36"
+            FontSize="30"
             Text="DEL"
             TextColor="Black" />
 
@@ -195,6 +195,7 @@
             TextColor="Black" />
 
         <Button
+            x:Name="div"
             Grid.Row="2"
             Grid.Column="3"
             BackgroundColor="Orange"
@@ -206,6 +207,7 @@
             class="Operator" />
 
         <Button
+            x:Name="mult"
             Grid.Row="3"
             Grid.Column="3"
             BackgroundColor="Orange"
@@ -217,6 +219,7 @@
             TextColor="White" />
 
         <Button
+            x:Name="minus"
             Grid.Row="4"
             Grid.Column="3"
             BackgroundColor="Orange"
@@ -228,6 +231,7 @@
             TextColor="White" />
 
         <Button
+            x:Name="plus"
             Grid.Row="5"
             Grid.Column="3"
             BackgroundColor="Orange"
@@ -239,6 +243,7 @@
             TextColor="White" />
 
         <Button
+            x:Name="eq"
             Grid.Row="6"
             Grid.Column="3"
             BackgroundColor="Orange"
