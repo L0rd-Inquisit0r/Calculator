@@ -1,193 +1,252 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Calculator.MainPage">
+<ContentPage
+    x:Class="Calculator.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <Grid  Padding="5,0" 
-           BackgroundColor="Black"
-           ColumnSpacing="1"
-           RowSpacing="1">
+    <Grid
+        Padding="5,0"
+        BackgroundColor="Black"
+        ColumnSpacing="1"
+        RowSpacing="1">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="1.25*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Label
-            x:Name="result"
+        <ScrollView
             Grid.Row="0"
             Grid.ColumnSpan="4"
-            BackgroundColor="Black"
-            FontAttributes="Bold"
-            FontSize="64"
-            HorizontalTextAlignment="End"
-            Text="0"
-            TextColor="White"
-            VerticalTextAlignment="Center"/>
+            HorizontalOptions="EndAndExpand"
+            HorizontalScrollBarVisibility="Never"
+            Orientation="Horizontal">
+            <Label
+                x:Name="equation"
+                BackgroundColor="Black"
+                FontAttributes="Bold"
+                FontSize="32"
+                HorizontalTextAlignment="End"
+                Text=" "
+                TextColor="LightGray"
+                VerticalTextAlignment="End" />
+        </ScrollView>
+        <ScrollView
+            Grid.Row="1"
+            Grid.RowSpan="1"
+            Grid.ColumnSpan="4"
+            HorizontalOptions="EndAndExpand"
+            HorizontalScrollBarVisibility="Always"
+            Orientation="Horizontal">
+            <Label
+                x:Name="result"
+                BackgroundColor="Black"
+                FontAttributes="Bold"
+                FontAutoScalingEnabled="True"
+                FontSize="64"
+                HorizontalTextAlignment="End"
+                LineBreakMode="NoWrap"
+                Text="0"
+                TextColor="White"
+                VerticalTextAlignment="Start" />
+        </ScrollView>
 
         <Button
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.ColumnSpan="2"
             BackgroundColor="Gray"
+            Clicked="Clear"
             CornerRadius="0"
             FontSize="36"
             Text="C"
-            TextColor="Black"/>
+            TextColor="Black" />
 
         <Button
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="2"
             BackgroundColor="Gray"
+            Clicked="Delete"
             CornerRadius="0"
             FontSize="36"
             Text="DEL"
-            TextColor="Black"/>
+            TextColor="Black" />
 
         <Button
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="0"
             BackgroundColor="Gray"
+            Clicked="Input"
             CornerRadius="0"
             FontSize="36"
             Text="7"
-            TextColor="Black"/>
+            TextColor="Black" />
 
         <Button
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="1"
             BackgroundColor="Gray"
+            Clicked="Input"
             CornerRadius="0"
             FontSize="36"
             Text="8"
-            TextColor="Black"/>
+            TextColor="Black" />
 
         <Button
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="2"
             BackgroundColor="Gray"
+            Clicked="Input"
             CornerRadius="0"
             FontSize="36"
             Text="9"
-            TextColor="Black"/>
+            TextColor="Black" />
 
         <Button
-            Grid.Row="3"
+            Grid.Row="4"
             Grid.Column="0"
             BackgroundColor="Gray"
+            Clicked="Input"
             CornerRadius="0"
             FontSize="36"
             Text="4"
-            TextColor="Black"/>
+            TextColor="Black" />
 
         <Button
-            Grid.Row="3"
+            Grid.Row="4"
             Grid.Column="1"
             BackgroundColor="Gray"
+            Clicked="Input"
             CornerRadius="0"
             FontSize="36"
             Text="5"
-            TextColor="Black"/>
+            TextColor="Black" />
 
         <Button
-            Grid.Row="3"
+            Grid.Row="4"
             Grid.Column="2"
             BackgroundColor="Gray"
+            Clicked="Input"
             CornerRadius="0"
             FontSize="36"
             Text="6"
-            TextColor="Black"/>
-
-        <Button
-            Grid.Row="4"
-            Grid.Column="0"
-            BackgroundColor="Gray"
-            CornerRadius="0"
-            FontSize="36"
-            Text="1"
-            TextColor="Black"/>
-
-        <Button
-            Grid.Row="4"
-            Grid.Column="1"
-            BackgroundColor="Gray"
-            CornerRadius="0"
-            FontSize="36"
-            Text="2"
-            TextColor="Black"/>
-
-        <Button
-            Grid.Row="4"
-            Grid.Column="2"
-            BackgroundColor="Gray"
-            CornerRadius="0"
-            FontSize="36"
-            Text="3"
-            TextColor="Black"/>
+            TextColor="Black" />
 
         <Button
             Grid.Row="5"
-            Grid.ColumnSpan="3"
+            Grid.Column="0"
             BackgroundColor="Gray"
+            Clicked="Input"
+            CornerRadius="0"
+            FontSize="36"
+            Text="1"
+            TextColor="Black" />
+
+        <Button
+            Grid.Row="5"
+            Grid.Column="1"
+            BackgroundColor="Gray"
+            Clicked="Input"
+            CornerRadius="0"
+            FontSize="36"
+            Text="2"
+            TextColor="Black" />
+
+        <Button
+            Grid.Row="5"
+            Grid.Column="2"
+            BackgroundColor="Gray"
+            Clicked="Input"
+            CornerRadius="0"
+            FontSize="36"
+            Text="3"
+            TextColor="Black" />
+
+        <Button
+            Grid.Row="6"
+            Grid.ColumnSpan="2"
+            BackgroundColor="Gray"
+            Clicked="Input"
             CornerRadius="0"
             FontSize="36"
             Text="0"
-            TextColor="Black"/>
+            TextColor="Black" />
 
         <Button
-            Grid.Row="1"
-            Grid.Column="3"
-            BackgroundColor="Orange"
+            x:Name="DecimalBtn"
+            Grid.Row="6"
+            Grid.Column="2"
+            BackgroundColor="Gray"
+            Clicked="Input"
             CornerRadius="0"
             FontSize="36"
-            Text="/"
-            TextColor="White"/>
+            Text="."
+            TextColor="Black" />
 
         <Button
             Grid.Row="2"
             Grid.Column="3"
             BackgroundColor="Orange"
+            Clicked="Input"
             CornerRadius="0"
             FontSize="36"
-            Text="X"
-            TextColor="White"/>
+            Text="÷"
+            TextColor="White"
+            class="Operator" />
 
         <Button
             Grid.Row="3"
             Grid.Column="3"
             BackgroundColor="Orange"
+            ClassId="Operator"
+            Clicked="Input"
             CornerRadius="0"
             FontSize="36"
-            Text="-"
-            TextColor="White"/>
+            Text="×"
+            TextColor="White" />
 
         <Button
             Grid.Row="4"
             Grid.Column="3"
             BackgroundColor="Orange"
+            ClassId="Operator"
+            Clicked="Input"
             CornerRadius="0"
             FontSize="36"
-            Text="+"
-            TextColor="White"/>
+            Text="-"
+            TextColor="White" />
 
         <Button
             Grid.Row="5"
             Grid.Column="3"
             BackgroundColor="Orange"
+            ClassId="Operator"
+            Clicked="Input"
+            CornerRadius="0"
+            FontSize="36"
+            Text="+"
+            TextColor="White" />
+
+        <Button
+            Grid.Row="6"
+            Grid.Column="3"
+            BackgroundColor="Orange"
+            Clicked="Equals"
             CornerRadius="0"
             FontSize="36"
             Text="="
-            TextColor="White"/>
+            TextColor="White" />
     </Grid>
 
 </ContentPage>
