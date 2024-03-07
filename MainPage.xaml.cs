@@ -6,6 +6,7 @@ namespace Calculator
     public partial class MainPage : ContentPage
     {
         private bool clearable = false;
+        private bool isError = false;
         private bool opsEnabled = true;
         private ParseCalculator pc = new();
         public MainPage()
@@ -18,25 +19,42 @@ namespace Calculator
             ResetResult();
             equation.Text = " ";
 
-            if (!opsEnabled) ToggleOps();
+            if (isError) ToggleOps();
         }
 
         private void Delete(object sender, EventArgs e)
         {
             string res = result.Text;
-            result.Text = res.Length == 1 || clearable ? "0" : res.Remove(res.Length - 1, 1) ;
+            if (equation.Text.Contains('='))
+            {
+                equation.Text = " ";
+            }
+            else if (res.Length == 1 || clearable || isError)
+            {
+                ResetResult();
+            }
+            else
+            {
+                result.Text = res.Remove(res.Length - 1, 1);
+            }
+
             if (!result.Text.Contains('.')) DecimalBtn.IsEnabled = true;
         }
 
         private void Input(object sender, EventArgs e)
         {
             string input = ((Button)sender).Text;
-            if (!opsEnabled) ToggleOps();
+            if (isError)
+            {
+                ResetResult();
+            }
 
             if ("1234567890.".Contains(input))
             {
-                if (clearable) 
+                if (clearable)
+                {
                     ResetResult();
+                }
 
                 if (input.Equals(".")) 
                     DecimalBtn.IsEnabled = false;
@@ -53,16 +71,11 @@ namespace Calculator
             else
             {
                 string eq = equation.Text;
-                string res = result.Text;
+                string res = NormalizeInput();
 
-                if (res.ElementAt(res.Length - 1).Equals('.')) // remove stray decimal point
-                {
-                    result.Text = res.Remove(res.Length - 1, 1);
-                    res = result.Text;
-                }
-
-                // Check if the input is an operation and set the result to "0"
-                result.Text = "0";
+                DecimalBtn.IsEnabled = true;
+                result.Text = res;
+                
 
                 equation.Text = (clearable ?
                     eq.Remove(eq.Length - 1, 1) :
@@ -74,22 +87,13 @@ namespace Calculator
 
         private void Equals(object sender, EventArgs e)
         {
-            equation.Text = ValidateEq() + result.Text;
+            equation.Text = ValidateEq() + NormalizeInput();
             try
             {
-                double evaluationResult = pc.Evaluate(equation.Text.Replace(" ", ""));
-                evaluationResult = Math.Round(evaluationResult, 2);
-                string fullResult = evaluationResult.ToString("0.##");
-
-                if (double.IsInfinity(evaluationResult) || double.IsNaN(evaluationResult))
-                {
-                    ErrorHandler("Cannot divide by 0");
-                }
-                else
-                {
-                    equation.Text += " =";
-                    result.Text = fullResult;
-                }
+                decimal res = pc.Evaluate(equation.Text.Replace(" ", ""));
+                equation.Text += " =";
+                result.Text = NormalizeNum(res).ToString();
+                
             }
             catch (Exception ex)
             {
@@ -102,20 +106,40 @@ namespace Calculator
         {
             result.Text = "0";
             result.FontSize = 64;
+            isError = false;
             clearable = false;
             DecimalBtn.IsEnabled = true;
+
+            if(!opsEnabled) ToggleOps();
         }
 
         private string ValidateEq()
         {
             string eq = equation.Text;
-            return ((eq.Contains("=") ? "0" : eq)
+            return ((eq.Contains('=') ? "0" : eq)
                  .Equals("0") ? "" : eq + " ");
         }
 
+        private string NormalizeInput()
+        {
+            string res = result.Text;
+            if (res.ElementAt(res.Length - 1).Equals('.')) // remove stray decimal 
+                result.Text = res.Remove(res.Length - 1, 1);
+
+            result.Text = NormalizeNum(decimal.Parse(res)).ToString();
+
+            return result.Text;
+        }
+
+        private decimal NormalizeNum(decimal value)
+        {
+            return value / 1.000000000000000000000000000000000m;
+        }
+
+
         private void ToggleOps()
         {
-            Button []opBtns = { plus, minus, div, mult, eq };
+            Button []opBtns = [plus, minus, div, mult, eq];
             foreach(Button btn in opBtns)
             {
                 btn.IsEnabled = !btn.IsEnabled;
@@ -124,9 +148,9 @@ namespace Calculator
             opsEnabled = plus.IsEnabled;
         }
 
-        private void ErrorHandler(string msg, int fontSize = 24)
+        private void ErrorHandler(string msg, int fontSize = 18)
         {
-            clearable = true;
+            isError = true;
             result.Text = "Error: " + msg;
             result.FontSize = fontSize;
             equation.Text = "";
@@ -138,9 +162,9 @@ namespace Calculator
     {
         public ParseCalculator() { }
 
-        public double Evaluate(string expression)
+        public decimal Evaluate(string expression)
         {
-            Stack<double> Numbers = new();
+            Stack<decimal> Numbers = new();
             Stack<char> Operators = new();
             StringBuilder temp = new();
 
@@ -152,7 +176,7 @@ namespace Calculator
                 }
                 else //expect an operator
                 {
-                    _ = double.TryParse(temp.ToString(), out double num); //suppressed a problem on testing if parsing is successful
+                    _ = decimal.TryParse(temp.ToString(), out decimal num); //suppressed a problem on testing if parsing is successful
                     temp.Clear();
                     Numbers.Push(num);
 
@@ -177,9 +201,9 @@ namespace Calculator
 
         }
 
-        private void Calculate(char op, Stack<double> numbers)
+        private void Calculate(char op, Stack<decimal> numbers)
         {
-            double num2 = numbers.Pop(), num1 = numbers.Pop(), result = 0;
+            decimal num2 = numbers.Pop(), num1 = numbers.Pop(), result = 0;
 
             switch (op)
             {
