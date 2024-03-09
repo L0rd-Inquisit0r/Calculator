@@ -76,7 +76,6 @@ namespace Calculator
                 DecimalBtn.IsEnabled = true;
                 result.Text = res;
                 
-
                 equation.Text = (clearable ?
                     eq.Remove(eq.Length - 1, 1) :
                     ValidateEq() + res + " ")
@@ -93,6 +92,7 @@ namespace Calculator
                 decimal res = pc.Evaluate(equation.Text.Replace(" ", ""));
                 equation.Text += " =";
                 result.Text = NormalizeNum(res).ToString();
+                clearable = true;
                 
             }
             catch (Exception ex)
